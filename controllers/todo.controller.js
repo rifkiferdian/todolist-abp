@@ -32,7 +32,10 @@ class TodoController {
     }
 
     static async createTodo(req, res) {
-        const {title, activity_group_id, priority} = req.body
+        var {title, activity_group_id, priority} = req.body
+        if(!priority){
+            priority = 'very-high';
+        }
         const dataInput = {
             title: title,
             priority: priority,
