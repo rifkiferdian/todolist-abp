@@ -49,8 +49,8 @@ class ActivityController {
         } catch (error) {
             if(error.name == 'SequelizeValidationError' || error.name == 'SequelizeUniqueConstraintError') {
                 return res.status(400).json({
-                    status : 'fail',
-                    message : error.errors.map(e => e.message)
+                    status : 'Bad Request',
+                    message : error.errors.map(e => e.message).join('')
                 })
             }
             console.log(error);
@@ -94,7 +94,14 @@ class ActivityController {
                     activity_id: activity_id
                 },
             });
-            res.status(200).json({ status: 'Success', message: 'Success', data: ret });
+            const dataView = {
+                created_at: ret.created_at,
+                updated_at: ret.updated_at,
+                id: ret.activity_id,
+                title: ret.title,
+                email: ret.email
+            }
+            res.status(200).json({ status: 'Success', message: 'Success', data: dataView });
         } catch (error) {
             if(error.name == 'SequelizeValidationError') {
                 return res.status(400).json({

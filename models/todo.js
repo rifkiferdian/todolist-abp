@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: 'Title cannot be empty.',
+          msg: 'activity_group_id cannot be null',
         }
       }
     },
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: 'Title cannot be empty.',
+          msg: 'title cannot be null',
         }
       }
     },
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: 'Priority cannot be empty.',
+          msg: 'priority cannot be empty',
         }
       }
     },

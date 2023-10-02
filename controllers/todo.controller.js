@@ -4,8 +4,10 @@ class TodoController {
 
     static async getAll(req, res) {
         try {
+            const activity_group_id = req.query.activity_group_id;
             const todo = await Todo.findAll({
-                attributes: [['todo_id', 'id'], 'activity_group_id', 'title', 'priority', 'is_active', 'created_at', 'updated_at', 'deleted_at']
+                attributes: [['todo_id', 'id'], 'activity_group_id', 'title', 'priority', 'is_active', 'created_at', 'updated_at', 'deleted_at'],
+                where: { activity_group_id: activity_group_id }
             });
             res.status(200).json({ status: 'Success', message: 'Success', data: todo });
         } catch (error) {
@@ -52,8 +54,9 @@ class TodoController {
         } catch (error) {
             if(error.name == 'SequelizeValidationError' || error.name == 'SequelizeUniqueConstraintError') {
                 return res.status(400).json({
-                    status : 'fail',
-                    message : error.errors.map(e => e.message)
+                    status : 'Bad Request',
+                    // message : 'title cannot be null'
+                    message : error.errors.map(e => e.message).join('')
                 })
             }
             console.log(error);
@@ -74,7 +77,7 @@ class TodoController {
                 return res.status(404).json({ status: "Not Found", message: 'Todo with ID '+Todo_id+' Not Found', data: [] });
             }
             await todo.destroy();
-            res.status(200).json({ status: 'Success', message: 'Success', data: [] });
+            res.status(200).json({ status: 'Success', message: 'Success', data: {} });
         } catch (error) {
             res.status(500).json({ status: 'Fail', message:error.message});
         }
