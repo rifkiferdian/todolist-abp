@@ -16,12 +16,13 @@ class TodoController {
     static async getOne(req, res) {
         try {
             const Todo_id = req.params.todo_id
-            const todo = await Todo.findAll({
+            const todo = await Todo.findOne({
                 attributes: [['todo_id', 'id'], 'activity_group_id', 'title', 'priority','is_active', 'created_at', 'updated_at', 'deleted_at'],
-                where: {
-                    Todo_id: Todo_id
-                }
+                where: { Todo_id: Todo_id }
             });
+            if (!todo) {
+                return res.status(404).json({ status: "Not Found", message: 'Todo with ID '+Todo_id+' Not Found', data: [] });
+            }
             return res.status(200).json({ status: 'Success', message: 'Success', data: todo });
         } catch (error) {
             res.status(500).json({ status: 'fail', message: error.message });

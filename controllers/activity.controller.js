@@ -16,12 +16,13 @@ class ActivityController {
     static async getOne(req, res) {
         try {
             const activity_id = req.params.activity_id
-            const activity = await Activity.findAll({
+            const activity = await Activity.findOne({
                 attributes: [['activity_id', 'id'], 'email', 'title', 'created_at', 'updated_at', 'deleted_at'],
-                where: {
-                    activity_id: activity_id
-                }
+                where: { activity_id: activity_id }
             });
+            if (!activity) {
+                return res.status(404).json({ status: "Not Found", message: 'Activity with ID '+activity_id+' Not Found', data: [] });
+            }
             return res.status(200).json({ status: 'Success', message: 'Success', data: activity });
         } catch (error) {
             res.status(500).json({ status: 'fail', message: error.message });
