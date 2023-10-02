@@ -48,7 +48,7 @@ class ActivityController {
             res.status(201).json({ status: 'Success', message: 'Success', data: dataView });
         } catch (error) {
             if(error.name == 'SequelizeValidationError' || error.name == 'SequelizeUniqueConstraintError') {
-                return res.status(422).json({
+                return res.status(400).json({
                     status : 'fail',
                     message : error.errors.map(e => e.message)
                 })
@@ -85,16 +85,19 @@ class ActivityController {
         }
 
         try {
-            await Activity.update(dataInput,{
+            const ret = await Activity.findByPk(activity_id);
+            if (!ret) {
+                return res.status(404).json({ status: "Not Found", message: 'Activity with ID '+activity_id+' Not Found', data: [] });
+            }
+            await ret.update(dataInput,{
                 where: {
                     activity_id: activity_id
                 },
             });
-            const ret = await Activity.findByPk(activity_id);
             res.status(200).json({ status: 'Success', message: 'Success', data: ret });
         } catch (error) {
             if(error.name == 'SequelizeValidationError') {
-                return res.status(422).json({
+                return res.status(400).json({
                     status : 'fail',
                     errors : error.errors.map(e => e.message)
                 })

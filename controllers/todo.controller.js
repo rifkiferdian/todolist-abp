@@ -51,7 +51,7 @@ class TodoController {
             res.status(201).json({ status: 'Success', message: 'Success', data: dataView });
         } catch (error) {
             if(error.name == 'SequelizeValidationError' || error.name == 'SequelizeUniqueConstraintError') {
-                return res.status(422).json({
+                return res.status(400).json({
                     status : 'fail',
                     message : error.errors.map(e => e.message)
                 })
@@ -88,16 +88,19 @@ class TodoController {
         }
 
         try {
-            await Todo.update(dataInput,{
+            const ret = await Todo.findByPk(Todo_id);
+            if (!ret) {
+                return res.status(404).json({ status: "Not Found", message: 'Todo with ID '+Todo_id+' Not Found', data: [] });
+            }
+            await ret.update(dataInput,{
                 where: {
                     todo_id: Todo_id
                 },
             });
-            const ret = await Todo.findByPk(Todo_id);
-            res.status(200).json({ status: 'Success', message: 'Success', data: ret });
+            return res.status(200).json({ status: 'Success', message: 'Success', data: ret });
         } catch (error) {
             if(error.name == 'SequelizeValidationError') {
-                return res.status(422).json({
+                return res.status(400).json({
                     status : 'fail',
                     errors : error.errors.map(e => e.message)
                 })
