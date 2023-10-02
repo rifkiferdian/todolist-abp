@@ -38,13 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     priority: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'priority cannot be empty',
-        }
-      }
+      type: DataTypes.STRING
     },
     is_active: DataTypes.INTEGER,
     created_at: DataTypes.DATE,

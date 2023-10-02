@@ -50,7 +50,7 @@ class ActivityController {
             if(error.name == 'SequelizeValidationError' || error.name == 'SequelizeUniqueConstraintError') {
                 return res.status(400).json({
                     status : 'Bad Request',
-                    message : error.errors.map(e => e.message).join('')
+                    message : error.errors.map(e => e.message).join('').replace('Activity.', '')
                 })
             }
             console.log(error);
@@ -71,7 +71,7 @@ class ActivityController {
                 return res.status(404).json({ status: "Not Found", message: 'Activity with ID '+activity_id+' Not Found', data: [] });
             }
             await activity.destroy();
-            res.status(200).json({ status: 'Success', message: 'Your Activity has been successfully deleted', data: [] });
+            res.status(200).json({ status: 'Success', message: 'Your Activity has been successfully deleted', data: {} });
         } catch (error) {
             res.status(500).json({ status: 'Fail', message:error.message});
         }

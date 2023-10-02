@@ -56,7 +56,7 @@ class TodoController {
                 return res.status(400).json({
                     status : 'Bad Request',
                     // message : 'title cannot be null'
-                    message : error.errors.map(e => e.message).join('')
+                    message : error.errors.map(e => e.message).join('').replace('Todo.', '')
                 })
             }
             console.log(error);
