@@ -36,7 +36,8 @@ class TodoController {
         const dataInput = {
             title: title,
             priority: priority,
-            activity_group_id: activity_group_id
+            activity_group_id: activity_group_id,
+            is_active:1
         }
 
         try {
@@ -46,10 +47,11 @@ class TodoController {
                 updated_at: result.updated_at,
                 id: result.todo_id,
                 title: result.title,
-                is_active: result.is_active,
+                is_active: Boolean(result.is_active),
                 activity_group_id: result.activity_group_id,
                 priority: result.priority,
             }
+            // console.log(dataView);
             res.status(201).json({ status: 'Success', message: 'Success', data: dataView });
         } catch (error) {
             if(error.name == 'SequelizeValidationError' || error.name == 'SequelizeUniqueConstraintError') {
